@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Térképkezelő</title>
+</head>
+
+<body>
+	<h1>Új térkép létrehozása</h1>
+	<form id="createMapForm">
+		<label for="emailAddress">E-mail cím:</label><br>
+		<input type="email" id="emailAddress" name="emailAddress"><br>
+		<label for="mapDescription">Térkép leírása:</label><br>
+		<input type="text" id="mapDescription" name="mapDescription"><br><br>
+		<button type="button" onclick="createMap()">Térkép létrehozása</button>
+	</form>
+
+	<h1>Térképek listája</h1>
+	<button type="button" onclick="getMapLinks()">Térképek listázása</button>
+	<div id="mapLinks"></div>
+
+	<script>
+		function createMap() {
+			const emailAddress = document.getElementById('emailAddress').value;
+			const mapDescription = document.getElementById('mapDescription').value;
+
+			fetch('/api/maps', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({emailAddress, mapDescription})
+			})
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById('mapLinks').innerHTML = data;
+				})
+				.catch(error => {
+					console.error('Hiba a térkép létrehozásakor:', error);
+				});
+		}
+
+		function getMapLinks() {
+			const emailAddress = document.getElementById('emailAddress').value;
+			if (!emailAddress) {
+				alert('Kérlek, add meg az e-mail címedet!');
+				return;
+			}
+
+			fetch('/api/maps/mylinks?emailAddress=' + emailAddress)
+				.then(response => response.text())
+				.then(data => {
+					document.getElementById('mapLinks').innerHTML = data;
+				})
+				.catch(error => {
+					console.error('Hiba a térképek listázásakor:', error);
+				});
+		}
+	</script>
+</body>
+
+</html>
