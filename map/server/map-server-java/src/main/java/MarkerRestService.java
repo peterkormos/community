@@ -36,7 +36,7 @@ public class MarkerRestService {
 
 	@GET
 	@Path("/{mapId}")
-	public Response getMarkersByMapId(@PathParam("mapId") Long mapId) {
+	public Response getMarkersByMapId(@PathParam("mapId") String mapId) {
 		List<Marker> markers = markerRepository.findByMapId(mapId);
 		return Response.ok(markers).build();
 	}

@@ -12,7 +12,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import dao.MapRepository;
+import dao.MapFileRepository;
 import datatype.Map;
 
 @Path("/maps")
@@ -20,13 +20,13 @@ import datatype.Map;
 @Consumes(MediaType.APPLICATION_JSON)
 public class MapManagerRestService {
 
-	private MapRepository mapRepository = new MapRepository();
+	private MapFileRepository mapRepository = new MapFileRepository();
 
 	@POST
 	public Response createMapLink(Map mapRequest) {
 		String mapId = UUID.randomUUID().toString();
 		Map map = new Map(mapRequest.getEmailAddress(), mapRequest.getMapDescription(), mapId);
-		mapRepository.save(map);
+		map = mapRepository.save(map);
 
 		String link = getLink(map);
 

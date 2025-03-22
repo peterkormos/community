@@ -1,5 +1,7 @@
 package datatype;
 
+import java.util.Objects;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -11,7 +13,7 @@ public class Marker {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @XmlTransient
     private Long id;
-    private Long mapId;
+    String mapId;
     private double lat;
     private double lng;
     private String content;
@@ -20,8 +22,7 @@ public class Marker {
     // Konstruktorok, getterek és setterek
     public Marker() {}
 
-    public Marker(Long mapId, double lat, double lng, String content, String emailAddress) {
-        this.mapId = mapId;
+    public Marker(double lat, double lng, String content, String emailAddress) {
         this.lat = lat;
         this.lng = lng;
         this.content = content;
@@ -34,14 +35,6 @@ public class Marker {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getMapId() {
-        return mapId;
-    }
-
-    public void setMapId(Long mapId) {
-        this.mapId = mapId;
     }
 
     public double getLat() {
@@ -76,15 +69,40 @@ public class Marker {
         this.emailAddress = emailAddress;
     }
 
-    @Override
-    public String toString() {
-        return "Marker{" +
-                "id=" + id +
-                ", mapId=" + mapId +
-                ", lat=" + lat +
-                ", lng=" + lng +
-                ", content='" + content + '\'' +
-                ", emailAddress='" + emailAddress + '\'' +
-                '}';
-    }
+	public String getMapId() {
+		return mapId;
+	}
+
+	public void setMapId(String mapId) {
+		this.mapId = mapId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(emailAddress, lat, lng, mapId);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Marker other = (Marker) obj;
+		return Objects.equals(emailAddress, other.emailAddress)
+				&& Double.doubleToLongBits(lat) == Double.doubleToLongBits(other.lat)
+				&& Double.doubleToLongBits(lng) == Double.doubleToLongBits(other.lng)
+				&& Objects.equals(mapId, other.mapId);
+	}
+
+	@Override
+	public String toString() {
+		return "Marker [id=" + id + ", mapId=" + mapId + ", lat=" + lat + ", lng=" + lng + ", content=" + content
+				+ ", emailAddress=" + emailAddress + "]";
+	}
+
+   
+    
 }

@@ -1,3 +1,4 @@
+
 function initMap() {
 	var map = L.map('map');
 
@@ -26,76 +27,79 @@ function createMarker(latlng, content) {
 		.bindTooltip(content);
 }
 
-function addMarkerToMap(marker, map) {
+function addMarkerToMap(marker, map, emailAddress) {
 	marker
 		.addTo(map)
-		.openPopup();
-	return marker;
-}
+//		.openPopup()
+		;
 
-function onMapClick(e, mapId, content, emailAddress) {
-	if (content && emailAddress) {
-		var marker = addMarkerToMap(createMarker(e.latlng, content), map);
-		saveMarkerToServer(marker, mapId, emailAddress);
-
+	if (emailAddress) {
 		marker.on('click', function() {
 			map.removeLayer(marker); // A jelölő eltávolítása a térképről
 			deleteMarkerFromServer(marker, mapId, emailAddress);
+			return marker;
 		});
 	}
+
+	return marker;
 }
 
-function deleteMarkerFromServer(marker, mapId, emailAddress) {
-	var latlng = marker.getLatLng();
-
-	// Marker adatok mentése a szerverre REST API-n keresztül
-	fetch('/api/markers', {
-		method: 'DELETE',
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		body: JSON.stringify({ mapId: mapId, lat: latlng.lat, lng: latlng.lng, emailAddress: emailAddress })
-	})
-		.then(response => response.json())
-		.then(data => {
-			console.log('Marker törölve:', data);
-		})
-		.catch(error => {
-			console.error('Hiba a marker törlésekor:', error);
-		});
+function onMapClick(e, mapId, content, emailAddress, map) {
+	if (content && emailAddress) {
+		var marker = addMarkerToMap(createMarker(e.latlng, content), map, emailAddress);
+		saveMarkerToServer(marker, mapId, emailAddress);
+	}
 }
 
 function saveMarkerToServer(marker, mapId, emailAddress) {
 	var latlng = marker.getLatLng();
 
 	// Marker adatok mentése a szerverre REST API-n keresztül
-	fetch('/api/marker', {
+	fetch(markerServerUrlBase, {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json'
 		},
 		body: JSON.stringify({ mapId: mapId, lat: latlng.lat, lng: latlng.lng, content: marker.getTooltip().getContent(), emailAddress: emailAddress })
 	})
-		.then(response => response.json())
-		.then(data => {
-			console.log('Marker mentve:', data);
-			//			marker.bindPopup('Marker mentve! ID: ' + data.id).openPopup();
-		})
+		//		.then(response => response.json())
+		//		.then(data => {
+		//			console.log('Marker mentve:', data);
+		//		})
 		.catch(error => {
 			console.error('Hiba a marker mentésekor:', error);
 			marker.bindPopup('Hiba a marker mentésekor!').openPopup();
 		});
 }
 
-function addMarkersFromServer(map, mapId, addEmail) {
+function deleteMarkerFromServer(marker, mapId, emailAddress) {
+	var latlng = marker.getLatLng();
+
+	// Marker adatok mentése a szerverre REST API-n keresztül
+	fetch(markerServerUrlBase, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify({ mapId: mapId, lat: latlng.lat, lng: latlng.lng, emailAddress: emailAddress })
+	})
+		//		.then(response => response.json())
+		//		.then(data => {
+		//			console.log('Marker törölve:', data);
+		//		})
+		.catch(error => {
+			console.error('Hiba a marker törlésekor:', error);
+		});
+}
+
+function addMarkersFromServer(map, mapId, emailAddress, addEmail) {
 	// Markerek betöltése a szerverről
-	fetch('/api/markers/' + mapId)
+	fetch(markerServerUrlBase + '/' + mapId + '/' + emailAddress)
 		.then(response => response.json())
 		.then(markers => {
 			markers.forEach(markerData => {
 				addMarkerToMap(createMarker(L.latLng(markerData.lat, markerData.lng),
-					markerData.content + (addEmail ? "<p>" + markerData.emailAddress : "")), map);
-				console.error('Marker ID: ' + markerData.id);
+					markerData.content), map, markerData.emailAddress);
 			});
 		})
 		.catch(error => {

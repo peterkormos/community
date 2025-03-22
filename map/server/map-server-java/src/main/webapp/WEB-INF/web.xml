@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<servlet>
+		<servlet-name>MapManagerServlet</servlet-name>
+		<servlet-class>MapManagerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MapManagerServlet</servlet-name>
+		<url-pattern>/MapManagerServlet/*</url-pattern>
+	</servlet-mapping>
+
+	<servlet>
+		<servlet-name>MarkerServlet</servlet-name>
+		<servlet-class>MarkerServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>MarkerServlet</servlet-name>
+		<url-pattern>/MarkerServlet/*</url-pattern>
+	</servlet-mapping>
+	<display-name>map-server-java</display-name>
+</web-app>

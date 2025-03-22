@@ -2,61 +2,48 @@
 <html>
 
 <head>
-	<title>Térképkezelő</title>
+<meta charset="UTF-8">
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>Térképkezelő</title>
+<link href="base.css" rel="stylesheet" type="text/css">
+
+<script type="text/javascript" src="serverConf.js"></script>
+<script type="text/javascript" src="admin_util.js"></script>
 </head>
 
 <body>
 	<h1>Új térkép létrehozása</h1>
 	<form id="createMapForm">
-		<label for="emailAddress">E-mail cím:</label><br>
-		<input type="email" id="emailAddress" name="emailAddress"><br>
-		<label for="mapDescription">Térkép leírása:</label><br>
-		<input type="text" id="mapDescription" name="mapDescription"><br><br>
-		<button type="button" onclick="createMap()">Térkép létrehozása</button>
+		<label for="emailAddress">E-mail cím:</label><br> <input
+			type="email" id="emailAddress" name="emailAddress"><br>
+		<label for="mapDescription">Térkép leírása:</label><br> <input
+			type="text" id="mapDescription" name="mapDescription"><br>
+		<br>
+		<button type="button" id="createMapButton">Térkép létrehozása</button>
 	</form>
-
+	<div id="mapLink"></div>
 	<h1>Térképek listája</h1>
-	<button type="button" onclick="getMapLinks()">Térképek listázása</button>
+	<button type="button" id="getMyMapLinksButton">Térképek
+		listázása</button>
 	<div id="mapLinks"></div>
+	<script type="text/javascript">
 
-	<script>
-		function createMap() {
-			const emailAddress = document.getElementById('emailAddress').value;
-			const mapDescription = document.getElementById('mapDescription').value;
-
-			fetch('/api/maps', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify({emailAddress, mapDescription})
-			})
-				.then(response => response.text())
-				.then(data => {
-					document.getElementById('mapLinks').innerHTML = data;
-				})
-				.catch(error => {
-					console.error('Hiba a térkép létrehozásakor:', error);
-				});
+	function getEmailAddress() {
+		return document.getElementById('emailAddress').value;
 		}
+	
+	 const createMapButton = document.getElementById("createMapButton");
+	 createMapButton.addEventListener("click", function (e) {
+	    	createMap(getEmailAddress(), document.getElementById('mapDescription').value);
+	    	getMyMapLinks(getEmailAddress());
+	    });
 
-		function getMapLinks() {
-			const emailAddress = document.getElementById('emailAddress').value;
-			if (!emailAddress) {
-				alert('Kérlek, add meg az e-mail címedet!');
-				return;
-			}
-
-			fetch('/api/maps/mylinks?emailAddress=' + emailAddress)
-				.then(response => response.text())
-				.then(data => {
-					document.getElementById('mapLinks').innerHTML = data;
-				})
-				.catch(error => {
-					console.error('Hiba a térképek listázásakor:', error);
-				});
-		}
-	</script>
+	const getMyMapLinksButton = document.getElementById("getMyMapLinksButton");
+	getMyMapLinksButton.addEventListener("click", function (e) {
+	 	getMyMapLinks(getEmailAddress());
+	 });
+	    	</script>
 </body>
 
 </html>

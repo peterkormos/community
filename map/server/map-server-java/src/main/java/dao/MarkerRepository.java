@@ -21,7 +21,7 @@ public class MarkerRepository {
         return marker;
     }
 
-    public List<Marker> findByMapId(Long mapId) {
+    public List<Marker> findByMapId(String mapId) {
         EntityManager em = emf.createEntityManager();
         List<Marker> markers = em.createQuery("SELECT m FROM Marker m WHERE m.mapId = :mapId", Marker.class)
                 .setParameter("mapId", mapId)
