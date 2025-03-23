@@ -16,9 +16,11 @@
 	integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
 	crossorigin=""></script>
 
+
 	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
 	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
 	<script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster-src.js"></script>
+	
 
 <script type="text/javascript" src="serverConf.js"></script>
 <script type="text/javascript" src="util.js"></script>
@@ -27,20 +29,46 @@
 <body>
 	<div id="map"></div>
 	<script type="text/javascript">
+	function geocodeAddress(address, callback) {
+		  const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(
+		    address
+		  )}&format=json`;
+
+		  fetch(url)
+		    .then((response) => response.json())
+		    .then((data) => {
+		      if (data && data.length > 0) {
+		        const lat = parseFloat(data[0].lat);
+		        const lng = parseFloat(data[0].lon);
+		        callback({ lat, lng });
+		      } else {
+		        callback(null); // Address not found
+		      }
+		    })
+		    .catch((error) => {
+		      console.error('Geocoding error:', error);
+		      callback(null);
+		    });
+		}
+
 	var mapId = new URLSearchParams(window.location.search).get('mapId');
 		var map = initMap();
-		var markerClusterGroup = L.markerClusterGroup();
-		map.addLayer(markerClusterGroup);
-
 		document.getElementsByClassName("leaflet-attribution-flag").style="visibility: hidden";
-		var emailAddress = prompt("Pont szerkesztéséhez megerősítő email ide érkezzen:");
-		addMarkersFromServer(markerClusterGroup, mapId, emailAddress);
-		map.on('click', function (e) {
-			var content = prompt("Pont azonosítója:");
 
-			onMapClick(e, mapId, content, emailAddress, markerClusterGroup);
+		geocodeAddress('Budapest, Szilas park', function (latlng ) {
+			addMarkerToMap(createMarker(L.latLng(latlng),
+					'valami' + latlng), map);
+			});
+
+		var markers = L.markerClusterGroup();
+		map.addLayer(markers);
+		
+		map.on('click', function (e) {
+
+			onMapClick(e, mapId, "Pont azonosítója:", "emailAddress", markers);
 		});
-	</script>
+
+		</script>
 </body>
 
 </html>

@@ -27,15 +27,19 @@ function createMarker(latlng, content) {
 		.bindTooltip(content);
 }
 
-function addMarkerToMap(marker, map, emailAddress) {
+function addMarkerToMap(marker, markerClusterGroup, emailAddress) {
+	markerClusterGroup.addLayer(marker);
+
+	/*	
 	marker
 		.addTo(map)
 //		.openPopup()
 		;
+*/
 
 	if (emailAddress) {
 		marker.on('click', function() {
-			map.removeLayer(marker); // A jelölő eltávolítása a térképről
+			markerClusterGroup.removeLayer(marker); // A jelölő eltávolítása a térképről
 			deleteMarkerFromServer(marker, mapId, emailAddress);
 			return marker;
 		});
@@ -44,9 +48,9 @@ function addMarkerToMap(marker, map, emailAddress) {
 	return marker;
 }
 
-function onMapClick(e, mapId, content, emailAddress, map) {
+function onMapClick(e, mapId, content, emailAddress, markerClusterGroup) {
 	if (content && emailAddress) {
-		var marker = addMarkerToMap(createMarker(e.latlng, content), map, emailAddress);
+		var marker = addMarkerToMap(createMarker(e.latlng, content), markerClusterGroup, emailAddress);
 		saveMarkerToServer(marker, mapId, emailAddress);
 	}
 }
@@ -92,14 +96,14 @@ function deleteMarkerFromServer(marker, mapId, emailAddress) {
 		});
 }
 
-function addMarkersFromServer(map, mapId, emailAddress, addEmail) {
+function addMarkersFromServer(markerClusterGroup, mapId, emailAddress, addEmail) {
 	// Markerek betöltése a szerverről
 	fetch(markerServerUrlBase + '/' + mapId + '/' + emailAddress)
 		.then(response => response.json())
 		.then(markers => {
 			markers.forEach(markerData => {
 				addMarkerToMap(createMarker(L.latLng(markerData.lat, markerData.lng),
-					markerData.content), map, markerData.emailAddress);
+					markerData.content), markerClusterGroup, markerData.emailAddress);
 			});
 		})
 		.catch(error => {
