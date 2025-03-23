@@ -110,3 +110,52 @@ function addMarkersFromServer(markerClusterGroup, mapId, emailAddress, addEmail)
 			console.error('Hiba a markerek betöltésekor:', error);
 		});
 }
+
+function clickToCopyText(element) {
+	element.addEventListener('click', () => {
+		copyTextToClipborard(element)
+	});
+}
+
+function copyTextToClipborard(textToCopy) {
+	//	const textToCopy = element.textContent;
+
+	if (navigator.clipboard) {
+		navigator.clipboard.writeText(textToCopy)
+			.then(() => {
+				alert('[' + textToCopy + '] vágólapra másolva...');
+			})
+			.catch(err => {
+				console.error('Másolás nem ment: ', err);
+				alert('Másolás nem ment. ;)');
+			});
+	};
+}
+
+function copyURLToClipborard(url) {
+	copyTextToClipborard(getBaseUrl() + '/' + url);
+}
+
+function getBaseUrl() {
+	const url = window.location.href;
+	const parts = url.split('/');
+
+	// Remove the last part (the page name)
+	parts.pop();
+
+	// Join the remaining parts
+	const baseUrl = parts.join('/');
+
+	return baseUrl;
+}
+
+
+var emailAddress;
+function getEmailAddress() {
+	if(emailAddress)
+		return emailAddress;
+	else
+		emailAddress = prompt("Pont szerkesztéséhez megerősítő email ide érkezzen:");
+	
+	return emailAddress;
+	}

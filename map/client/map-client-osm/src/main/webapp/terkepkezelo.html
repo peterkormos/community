@@ -9,36 +9,39 @@
 <link href="base.css" rel="stylesheet" type="text/css">
 
 <script type="text/javascript" src="serverConf.js"></script>
+<script type="text/javascript" src="util.js"></script>
 <script type="text/javascript" src="admin_util.js"></script>
+
 </head>
 
 <body>
-	<h1>Új térkép létrehozása</h1>
-	<form id="createMapForm">
-		<label for="mapDescription">Térkép leírása:</label><br> <input
-			type="text" id="mapDescription" name="mapDescription"> <br>
-		<label for="emailAddress">Adminisztrációhoz email cím:</label><br>
-		<input type="email" id="emailAddress" name="emailAddress"> <br>
-		<br>
-		<button type="button" id="createMapButton">Térkép létrehozása</button>
-	</form>
-	<div id="mapLink"></div>
-	<h1>Térképek listája</h1>
 	<button type="button" id="getMyMapLinksButton">Térképek
 		listázása</button>
 	<div id="mapLinks"></div>
-	<script type="text/javascript">
+	</p>
 
-	function getEmailAddress() {
-		return document.getElementById('emailAddress').value;
-		}
+	<p>
+
+		<label for="mapDescription">Térkép leírása:</label> <input type="text"
+			id="mapDescription" name="mapDescription" size="50">
+		<button type="button" id="createMapButton">Új térkép
+			létrehozása</button>
+		<script type="text/javascript">
 	
-	 const createMapButton = document.getElementById("createMapButton");
-	 createMapButton.addEventListener("click", function (e) {
-	    	if(createMap(getEmailAddress(), document.getElementById('mapDescription').value)) {
-	    	getMyMapLinks(getEmailAddress());
-		    	}
-	    });
+		 const createMapButton = document.getElementById("createMapButton");
+		 createMapButton.addEventListener("click", function (e) {
+		    	if(createMap(getEmailAddress(), document.getElementById('mapDescription').value)) {
+		    	getMyMapLinks(getEmailAddress());
+			    	}
+		    });
+		    
+		 document.getElementById("mapDescription").addEventListener("change", function (e) {
+		    	if(createMap(getEmailAddress(), document.getElementById('mapDescription').value)) {
+		    	getMyMapLinks(getEmailAddress());
+			    	}
+		    });
+
+	 
 
 	const getMyMapLinksButton = document.getElementById("getMyMapLinksButton");
 	getMyMapLinksButton.addEventListener("click", function (e) {

@@ -13,7 +13,7 @@ function createMap(emailAddress, mapDescription) {
 	})
 		.then(response => response.text())
 		.then(data => {
-			document.getElementById('mapLink').innerHTML = data;
+			document.getElementById('mapLinks').innerHTML = data;
 			return true;
 		})
 		.catch(error => {
@@ -55,7 +55,6 @@ function deleteMap(mapId, emailAddress) {
 	})
 		.then(response => response.text())
 		.then(data => {
-			document.getElementById('mapLink').innerHTML = '';
 			document.getElementById('mapLinks').innerHTML = data;
 		})
 		.catch(error => {

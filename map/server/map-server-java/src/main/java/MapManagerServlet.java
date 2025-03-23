@@ -41,7 +41,7 @@ public class MapManagerServlet extends HttpServlet {
 			map = mapRepository.save(map);
 
 			// Generáljuk a linket
-			String link = getLink(map, request);
+			String link = getLinks(mapRepository.findByEmailAddress(map.getEmailAddress()), request);
 
 			// Küldjük vissza a választ
 			response.setContentType("text/html");
@@ -121,26 +121,28 @@ public class MapManagerServlet extends HttpServlet {
 		response.setStatus(HttpServletResponse.SC_OK);
 	}
 
-	private StringBuilder getLinks(List<Map> maps, HttpServletRequest request) {
+	private String getLinks(List<Map> maps, HttpServletRequest request) {
 		StringBuilder html = new StringBuilder();
-		
+
 		html.append("<link rel='stylesheet' href='base.css' media='screen' />");
 
 		html.append("<table style='width: 100%; border-collapse: collapse;' border='1'>");
-		html.append("<tr><th>Leírás</th><th>pontok a térképen</th><th>térkép admin emailcíme</th><th>Művelet</th></tr>");
+		html.append(
+				"<tr><th>Leírás</th><th>pontok a térképen</th><th>térkép admin emailcíme</th><th>Link</th><th>Művelet</th></tr>");
 
 		for (Map map : maps) {
 			html.append(getLink(map, request));
 		}
 		html.append("</table>");
-		return html;
+		return html.toString();
 	}
-
+	
 	private String getLink(Map map, HttpServletRequest request) {
 		return String.format(
-				"<tr><td><a href='map.html?mapId=%1$s'>%2$s</a></td><td>%3$d pont</td><td>%4$s</td><td>"
-						+ "<button type='submit' onclick=\"deleteMap('%1$s', '%5$s')\" >Töröl</button></td></tr>",
+				"<tr><td><a href='%5$s'>%2$s</a></td><td>%3$d pont</td><td>%4$s</td>"
+				+ "<td><div onclick=\"copyURLToClipborard('%5$s');\">Vágólapra másol</div></td>"
+				+ "<td><button type='submit' onclick=\"deleteMap('%1$s', '%4$s');\" >Töröl</button></td></tr>",
 				map.getMapId(), map.getMapDescription(), map.getMarkers().size(), map.getEmailAddress(),
-				map.getEmailAddress());
+				"map.html?mapId="+map.getMapId());
 	}
 }
