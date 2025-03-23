@@ -78,7 +78,7 @@ public class MarkerServlet extends HttpServlet {
 				// megjelennek neki.
 				if (map.getEmailAddress().equals(emailAddress)) {
 					markers.forEach(m -> {
-						m.setContent(m.getContent() + "<p>" + m.getEmailAddress());
+						m.setContent(m.getContent() + " - " + m.getEmailAddress());
 					});
 				}
 
