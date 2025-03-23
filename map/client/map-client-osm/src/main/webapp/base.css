@@ -1,7 +1,17 @@
 @charset "UTF-8";
 
-html,
-body {
+@import
+	url('https://fonts.googleapis.com/css?family=Barlow+Semi+Condensed&display=swap')
+	;
+
+* {
+	font-family: 'Barlow Semi Condensed', sans-serif;
+	/*
+    font-size: 20px;
+*/
+}
+
+html, body {
 	height: 100%;
 	padding: 0;
 	margin: 0;
@@ -11,4 +21,66 @@ body {
 	/* configure the size of the map */
 	width: 100%;
 	height: 100%;
+}
+
+input, select {
+	/*
+	border-radius: 5px; padding-left: 10px;
+	background: linear-gradient(rgb(235,235,235), white);
+	border: hidden;
+*/
+	border-width: 1px;
+	background: LemonChiffon;
+	padding-bottom: 5px;
+}
+
+button, input[type="submit"] {
+	background: DodgerBlue;
+	border: 3px solid DodgerBlue;
+	border-radius: 3px;
+	padding: 5px;
+	color: LightGray;
+	font-weight: bold;
+	cursor: pointer;
+	/*
+	background: linear-gradient(rgba(0,150,0,0.3), white);
+*/
+}
+
+button.main,
+input[type="submit"].main {
+	background: green;
+	border: 3px solid green;
+}
+
+button:hover,
+button:focus,
+input[type="submit"]:hover,
+input[type="submit"]:focus {
+	color: white;
+}
+
+button:focus,
+input:focus, 
+select:focus {
+	border-color: #333;
+}
+
+table {
+	border-collapse: collapse;
+	empty-cells: show;
+	box-shadow: 5px 5px 10px #888;
+	padding-top: 5px;
+	padding-right: 5px;
+	padding-bottom: 5px;
+	padding-left: 5px;
+}
+
+th {
+	background: lightblue;
+	padding: 5px;
+}
+
+td {
+	padding: 3px;
 }

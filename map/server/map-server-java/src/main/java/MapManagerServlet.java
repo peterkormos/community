@@ -73,7 +73,7 @@ public class MapManagerServlet extends HttpServlet {
 					mapRepository.delete(map);
 					PrintWriter out = response.getWriter();
 					out.println(getLinks(mapRepository.findByEmailAddress(emailAddress), request));
-					
+
 					response.setStatus(HttpServletResponse.SC_OK);
 				} else {
 					response.setStatus(HttpServletResponse.SC_NOT_FOUND);
@@ -123,15 +123,24 @@ public class MapManagerServlet extends HttpServlet {
 
 	private StringBuilder getLinks(List<Map> maps, HttpServletRequest request) {
 		StringBuilder html = new StringBuilder();
+		
+		html.append("<link rel='stylesheet' href='base.css' media='screen' />");
+
+		html.append("<table style='width: 100%; border-collapse: collapse;' border='1'>");
+		html.append("<tr><th>Leírás</th><th>pontok a térképen</th><th>térkép admin emailcíme</th><th>Művelet</th></tr>");
+
 		for (Map map : maps) {
 			html.append(getLink(map, request));
 		}
+		html.append("</table>");
 		return html;
 	}
 
 	private String getLink(Map map, HttpServletRequest request) {
-		return "<a href='index.html?mapId=" + map.getMapId() + "'>" + map.getMapDescription() + " megnyitása. (Admin: "
-				+ map.getEmailAddress() + ")</a> " + "<button type='submit' onclick=\"deleteMap('" + map.getMapId() + "', '" + map.getEmailAddress() + "')\" >Töröl</button>"
-				+ "<br>";
+		return String.format(
+				"<tr><td><a href='index.html?mapId=%1$s'>%2$s</a></td><td>%3$d pont</td><td>%4$s</td><td>"
+						+ "<button type='submit' onclick=\"deleteMap('%1$s', '%5$s')\" >Töröl</button></td></tr>",
+				map.getMapId(), map.getMapDescription(), map.getMarkers().size(), map.getEmailAddress(),
+				map.getEmailAddress());
 	}
 }
