@@ -72,7 +72,7 @@ public class MapManagerRestService {
 	}
 
 	private String getLink(Map map) {
-		return "<a href='index.html?mapId=" + map.getMapId() + "'>" + map.getMapDescription() + " megnyitása. (Admin: "
+		return "<a href='map.html?mapId=" + map.getMapId() + "'>" + map.getMapDescription() + " megnyitása. (Admin: "
 				+ map.getEmailAddress() + ")</a><br>";
 	}
 }

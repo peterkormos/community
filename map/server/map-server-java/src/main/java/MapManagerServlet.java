@@ -138,7 +138,7 @@ public class MapManagerServlet extends HttpServlet {
 
 	private String getLink(Map map, HttpServletRequest request) {
 		return String.format(
-				"<tr><td><a href='index.html?mapId=%1$s'>%2$s</a></td><td>%3$d pont</td><td>%4$s</td><td>"
+				"<tr><td><a href='map.html?mapId=%1$s'>%2$s</a></td><td>%3$d pont</td><td>%4$s</td><td>"
 						+ "<button type='submit' onclick=\"deleteMap('%1$s', '%5$s')\" >Töröl</button></td></tr>",
 				map.getMapId(), map.getMapDescription(), map.getMarkers().size(), map.getEmailAddress(),
 				map.getEmailAddress());

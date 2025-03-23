@@ -15,10 +15,10 @@
 <body>
 	<h1>Új térkép létrehozása</h1>
 	<form id="createMapForm">
-		<label for="emailAddress">E-mail cím:</label><br> <input
-			type="email" id="emailAddress" name="emailAddress"><br>
 		<label for="mapDescription">Térkép leírása:</label><br> <input
-			type="text" id="mapDescription" name="mapDescription"><br>
+			type="text" id="mapDescription" name="mapDescription"> <br>
+		<label for="emailAddress">Adminisztrációhoz email cím:</label><br>
+		<input type="email" id="emailAddress" name="emailAddress"> <br>
 		<br>
 		<button type="button" id="createMapButton">Térkép létrehozása</button>
 	</form>
@@ -35,8 +35,9 @@
 	
 	 const createMapButton = document.getElementById("createMapButton");
 	 createMapButton.addEventListener("click", function (e) {
-	    	createMap(getEmailAddress(), document.getElementById('mapDescription').value);
+	    	if(createMap(getEmailAddress(), document.getElementById('mapDescription').value)) {
 	    	getMyMapLinks(getEmailAddress());
+		    	}
 	    });
 
 	const getMyMapLinksButton = document.getElementById("getMyMapLinksButton");
